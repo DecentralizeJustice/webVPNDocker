@@ -1,0 +1,28 @@
+{
+  "name": "vite-vue-starter",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "nodemon src/server/main.js -w src/server",
+    "start": "NODE_ENV=production node src/server/main.js",
+    "build": "vite build",
+    "push": "docker push anonindustries/example_image:latest",
+    "tag": "docker tag example_image:latest anonindustries/example_image:latest",
+    "ship": "yarn run dockerBuild && yarn run tag && yarn run push",
+    "dockerBuild": "docker build -t example_image ."
+  },
+  "dependencies": {
+    "axios": "^1.4.0",
+    "express": "^4.18.2",
+    "vite-express": "*",
+    "vue": "^3.2.45"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.0.0",
+    "autoprefixer": "^10.4.14",
+    "nodemon": "^2.0.20",
+    "postcss": "^8.4.23",
+    "tailwindcss": "^3.3.2",
+    "vite": "^4.0.4"
+  }
+}
