@@ -17,14 +17,27 @@
 </section>
 </template>
 <script setup>
-import axios from 'axios';
+import axios from 'axios'
 import { ref } from 'vue'
+import _sodium from 'libsodium-wrappers'
 const message = ref('')
 const textFile = ref(null)
 async function getUser() {
   try {
     const response = await axios.get('/config');
-    console.log(response.data);
+    await _sodium.ready;
+    const sodium = _sodium;
+    function decrypt_after_extracting_nonce(nonce_and_ciphertext) {
+      if (nonce_and_ciphertext.length < sodium.crypto_secretbox_NONCEBYTES + sodium.crypto_secretbox_MACBYTES) {
+          throw "Short message";
+      }
+      let nonce = nonce_and_ciphertext.slice(0, sodium.crypto_secretbox_NONCEBYTES),
+          ciphertext = nonce_and_ciphertext.slice(sodium.crypto_secretbox_NONCEBYTES);
+      const key = sodium.from_hex('724b092810ec86d7e35c9d067702b31ef90bc43a7b598626749914d6a3e033ed')
+      return sodium.crypto_secretbox_open_easy(ciphertext, nonce, key);
+    }
+    const decrypt = decrypt_after_extracting_nonce(sodium.from_base64(response.data))
+    console.log(sodium.to_string(decrypt))
 /*     var fileURL = window.URL.createObjectURL(new Blob([response.data]));
     var fileLink = document.createElement('a');
     fileLink.href = fileURL;
