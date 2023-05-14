@@ -1,11 +1,14 @@
 'use strict';
 const express = require("express");
+const helmet = require("helmet");
 const path = require('path')
 const ViteExpress = require("vite-express")
 const { readFile } = require('fs/promises')
 const _sodium = require('libsodium-wrappers');
 const app = express();
-
+if (process.env.NODE_ENV === "production") {
+  app.use(helmet());
+}
 app.get('/config', async (req, res) => {
   const fileName = path.join('config', '/', 'peer1', '/', 'peer1.conf')
   const config = await content(path.join(__dirname, fileName))  
