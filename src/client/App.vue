@@ -10,6 +10,7 @@
   type="text" placeholder="Write a text" v-model="message">
   <button class="inline-block py-3 px-6 my-2 leading-none text-white
    bg-indigo-500 hover:bg-indigo-600 rounded shadow" @click="getUser()">Primary button</button>
+   <img :src="src">
 </div>
 {{ textFile }}
     </div>
@@ -22,8 +23,13 @@ import { ref } from 'vue'
 import _sodium from 'libsodium-wrappers'
 const message = ref('')
 const textFile = ref(null)
+import QRCode from 'qrcode'
+const src = ref('')
+
+
 async function getUser() {
   try {
+    src.value = await QRCode.toDataURL('hijkjljl')
     const response = await axios.get('/config');
     await _sodium.ready;
     const sodium = _sodium;
@@ -36,8 +42,8 @@ async function getUser() {
       const key = sodium.from_hex('724b092810ec86d7e35c9d067702b31ef90bc43a7b598626749914d6a3e033ed')
       return sodium.crypto_secretbox_open_easy(ciphertext, nonce, key);
     }
-    const decrypt = decrypt_after_extracting_nonce(sodium.from_base64(response.data))
-    console.log(sodium.to_string(decrypt))
+    const decrypted = decrypt_after_extracting_nonce(sodium.from_base64(response.data))
+    console.log(sodium.to_string(decrypted))
 /*     var fileURL = window.URL.createObjectURL(new Blob([response.data]));
     var fileLink = document.createElement('a');
     fileLink.href = fileURL;
