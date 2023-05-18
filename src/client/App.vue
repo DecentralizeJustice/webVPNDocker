@@ -1,5 +1,5 @@
 <template>
-  <section class="overflow-hidden">
+  <!-- <section class="overflow-hidden">
   <div class="container mx-auto">
     <div class="text-center bg-white overflow-hidden border rounded-xl">
       <section v-if="!unlocked" class="p-4">
@@ -88,7 +88,18 @@
 </section>
     </div>
   </div>
-</section>
+</section> -->
+<div class="row justify-center full-height full-width text-center">
+  <div class="q-pa-md row items-center q-gutter-md">
+    <q-card class="my-card text-black">
+      <q-card-section>
+        {{ lorem }}
+      </q-card-section>
+    </q-card>
+  </div>
+</div>
+
+
 </template>
 <script setup>
 import axios from 'axios'
@@ -99,6 +110,7 @@ const textFile = ref(null)
 import QRCode from 'qrcode'
 const src = ref('')
 const unlocked = ref(false)
+const lorem = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
 
 
 async function getUser() {
@@ -129,5 +141,8 @@ async function getUser() {
   }
 }
 </script>
-<style scoped>
+<style lang="sass" scoped>
+.my-card
+  width: 100%
+  max-width: 250px
 </style>
